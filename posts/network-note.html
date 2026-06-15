@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网络排查备忘 - Little Sweet Blog</title>
+  <meta name="description" content="一次网络问题排查的简单备忘。">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">Little Sweet</a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html#posts">文章</a>
+      <a href="../index.html#about">关于</a>
+      <a href="https://github.com/littlesweetdot122333">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="article">
+    <a class="back-link" href="../index.html">返回首页</a>
+    <p class="post-meta">2026-06-15 / 笔记</p>
+    <h1>网络排查备忘</h1>
+    <p>排查网络问题时，不要一开始就改配置。先分层确认：物理链路、IP 地址、默认路由、DNS、端口连通、业务进程。</p>
+    <p>常用命令包括：</p>
+    <ul>
+      <li><code>ipconfig /all</code> 或 <code>ip addr</code></li>
+      <li><code>route print</code> 或 <code>ip route</code></li>
+      <li><code>nslookup</code></li>
+      <li><code>tracert</code> 或 <code>traceroute</code></li>
+      <li><code>Test-NetConnection</code> 或 <code>nc</code></li>
+    </ul>
+    <p>先证明问题在哪一层，再决定是否修改配置。</p>
+  </main>
+</body>
+</html>
