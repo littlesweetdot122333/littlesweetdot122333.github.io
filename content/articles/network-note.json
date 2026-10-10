@@ -1,0 +1,8 @@
+{
+  "title": "网络排查备忘",
+  "date": "2026-06-15",
+  "category": "技术与学习",
+  "description": "记录一次从路由、DNS、服务状态一路定位问题的排查过程。",
+  "cover": "",
+  "body": "排查网络问题时，不要一开始就改配置。先分层确认：物理链路、IP 地址、默认路由、DNS、端口连通、业务进程。\n\n常用命令包括：\n\n- `ipconfig /all` 或 `ip addr`\n- `route print` 或 `ip route`\n- `nslookup`\n- `tracert` 或 `traceroute`\n- `Test-NetConnection` 或 `nc`\n\n先证明问题在哪一层，再决定是否修改配置。"
+}

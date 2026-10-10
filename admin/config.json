@@ -1,0 +1,71 @@
+{
+  "backend": {
+    "name": "github",
+    "repo": "littlesweetdot122333/littlesweetdot122333.github.io",
+    "branch": "main",
+    "auth_endpoint": "auth"
+  },
+  "load_config_file": false,
+  "publish_mode": "editorial_workflow",
+  "media_folder": "assets/uploads",
+  "public_folder": "/assets/uploads",
+  "site_url": "https://coffeee.xyz",
+  "display_url": "https://coffeee.xyz",
+  "locale": "zh_Hans",
+  "show_preview_links": false,
+  "collections": [
+    {
+      "name": "articles",
+      "label": "文章",
+      "label_singular": "文章",
+      "folder": "content/articles",
+      "format": "json",
+      "extension": "json",
+      "create": true,
+      "slug": "{{year}}-{{month}}-{{day}}-{{slug}}",
+      "summary": "{{title}} · {{date}} · {{category}}",
+      "sortable_fields": ["date", "title", "category"],
+      "fields": [
+        {"label": "标题", "name": "title", "widget": "string"},
+        {"label": "日期", "name": "date", "widget": "datetime", "date_format": "YYYY-MM-DD", "time_format": false, "format": "YYYY-MM-DD"},
+        {"label": "分类", "name": "category", "widget": "select", "options": ["技术与学习", "生活随笔", "读书与思考"]},
+        {"label": "摘要", "name": "description", "widget": "text", "required": false},
+        {"label": "封面照片", "name": "cover", "widget": "image", "required": false},
+        {"label": "正文", "name": "body", "widget": "markdown"}
+      ]
+    },
+    {
+      "name": "travel",
+      "label": "旅行日记",
+      "label_singular": "旅行日记",
+      "folder": "content/travel",
+      "format": "json",
+      "extension": "json",
+      "create": true,
+      "slug": "{{year}}-{{month}}-{{day}}-{{slug}}",
+      "summary": "{{title}} · {{location}} · {{date}}",
+      "fields": [
+        {"label": "标题", "name": "title", "widget": "string"},
+        {"label": "旅行日期", "name": "date", "widget": "datetime", "date_format": "YYYY-MM-DD", "time_format": false, "format": "YYYY-MM-DD"},
+        {"label": "地点", "name": "location", "widget": "string"},
+        {"label": "摘要", "name": "description", "widget": "text", "required": false},
+        {"label": "封面照片", "name": "cover", "widget": "image", "required": false},
+        {"label": "正文（可插入多张照片）", "name": "body", "widget": "markdown"}
+      ]
+    },
+    {
+      "name": "settings",
+      "label": "首页与关于我",
+      "files": [{
+        "name": "profile", "label": "个人资料", "file": "content/settings.json", "format": "json",
+        "fields": [
+          {"label": "博客名称", "name": "name", "widget": "string"},
+          {"label": "首页标题", "name": "headline", "widget": "string"},
+          {"label": "简介", "name": "intro", "widget": "text"},
+          {"label": "关于我", "name": "about", "widget": "markdown"},
+          {"label": "GitHub 地址", "name": "github", "widget": "string"}
+        ]
+      }]
+    }
+  ]
+}
