@@ -24,14 +24,52 @@
       "create": true,
       "slug": "{{year}}-{{month}}-{{day}}-{{slug}}",
       "summary": "{{title}} · {{date}} · {{category}}",
-      "sortable_fields": ["date", "title", "category"],
+      "sortable_fields": [
+        "date",
+        "title",
+        "category"
+      ],
       "fields": [
-        {"label": "标题", "name": "title", "widget": "string"},
-        {"label": "日期", "name": "date", "widget": "datetime", "date_format": "YYYY-MM-DD", "time_format": false, "format": "YYYY-MM-DD"},
-        {"label": "分类", "name": "category", "widget": "select", "options": ["技术与学习", "生活随笔", "读书与思考"]},
-        {"label": "摘要", "name": "description", "widget": "text", "required": false},
-        {"label": "封面照片", "name": "cover", "widget": "image", "required": false},
-        {"label": "正文", "name": "body", "widget": "markdown"}
+        {
+          "label": "标题",
+          "name": "title",
+          "widget": "string"
+        },
+        {
+          "label": "日期",
+          "name": "date",
+          "widget": "datetime",
+          "date_format": "YYYY-MM-DD",
+          "time_format": false,
+          "format": "YYYY-MM-DD"
+        },
+        {
+          "label": "分类",
+          "name": "category",
+          "widget": "select",
+          "options": [
+            "技术与学习",
+            "生活随笔",
+            "读书与思考"
+          ]
+        },
+        {
+          "label": "摘要",
+          "name": "description",
+          "widget": "text",
+          "required": false
+        },
+        {
+          "label": "封面照片",
+          "name": "cover",
+          "widget": "image",
+          "required": false
+        },
+        {
+          "label": "正文",
+          "name": "body",
+          "widget": "markdown"
+        }
       ]
     },
     {
@@ -45,27 +83,184 @@
       "slug": "{{year}}-{{month}}-{{day}}-{{slug}}",
       "summary": "{{title}} · {{location}} · {{date}}",
       "fields": [
-        {"label": "标题", "name": "title", "widget": "string"},
-        {"label": "旅行日期", "name": "date", "widget": "datetime", "date_format": "YYYY-MM-DD", "time_format": false, "format": "YYYY-MM-DD"},
-        {"label": "地点", "name": "location", "widget": "string"},
-        {"label": "摘要", "name": "description", "widget": "text", "required": false},
-        {"label": "封面照片", "name": "cover", "widget": "image", "required": false},
-        {"label": "正文（可插入多张照片）", "name": "body", "widget": "markdown"}
+        {
+          "label": "标题",
+          "name": "title",
+          "widget": "string"
+        },
+        {
+          "label": "旅行日期",
+          "name": "date",
+          "widget": "datetime",
+          "date_format": "YYYY-MM-DD",
+          "time_format": false,
+          "format": "YYYY-MM-DD"
+        },
+        {
+          "label": "地点",
+          "name": "location",
+          "widget": "string"
+        },
+        {
+          "label": "摘要",
+          "name": "description",
+          "widget": "text",
+          "required": false
+        },
+        {
+          "label": "封面照片",
+          "name": "cover",
+          "widget": "image",
+          "required": false
+        },
+        {
+          "label": "正文（可插入多张照片）",
+          "name": "body",
+          "widget": "markdown"
+        }
+      ]
+    },
+    {
+      "name": "coffeee",
+      "label": "Coffeee本尊",
+      "files": [
+        {
+          "name": "gallery",
+          "label": "猫咪相册与视频",
+          "file": "content/coffeee.json",
+          "format": "json",
+          "fields": [
+            {
+              "label": "栏目简介",
+              "name": "intro",
+              "widget": "text"
+            },
+            {
+              "label": "栏目封面",
+              "name": "cover",
+              "widget": "image",
+              "required": false
+            },
+            {
+              "label": "照片与视频",
+              "name": "entries",
+              "widget": "list",
+              "summary": "{{fields.title}} · {{fields.type}}",
+              "fields": [
+                {
+                  "label": "类型",
+                  "name": "type",
+                  "widget": "select",
+                  "options": [
+                    {
+                      "label": "照片",
+                      "value": "image"
+                    },
+                    {
+                      "label": "视频",
+                      "value": "video"
+                    }
+                  ],
+                  "default": "image"
+                },
+                {
+                  "label": "标题",
+                  "name": "title",
+                  "widget": "string"
+                },
+                {
+                  "label": "说明",
+                  "name": "caption",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "label": "照片或视频文件",
+                  "name": "src",
+                  "widget": "file",
+                  "media_library": {
+                    "config": {
+                      "multiple": false
+                    }
+                  },
+                  "hint": "照片选择 image，视频选择 video。可上传 JPG、PNG、WebP 照片或 MP4 视频。"
+                },
+                {
+                  "label": "照片替代文字",
+                  "name": "alt",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "label": "照片缩略图（可选）",
+                  "name": "thumbnail",
+                  "widget": "image",
+                  "required": false
+                },
+                {
+                  "label": "视频封面（可选）",
+                  "name": "poster",
+                  "widget": "image",
+                  "required": false
+                },
+                {
+                  "label": "缩略图宽度（可选）",
+                  "name": "width",
+                  "widget": "number",
+                  "required": false,
+                  "value_type": "int"
+                },
+                {
+                  "label": "缩略图高度（可选）",
+                  "name": "height",
+                  "widget": "number",
+                  "required": false,
+                  "value_type": "int"
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
       "name": "settings",
       "label": "首页与关于我",
-      "files": [{
-        "name": "profile", "label": "个人资料", "file": "content/settings.json", "format": "json",
-        "fields": [
-          {"label": "博客名称", "name": "name", "widget": "string"},
-          {"label": "首页标题", "name": "headline", "widget": "string"},
-          {"label": "简介", "name": "intro", "widget": "text"},
-          {"label": "关于我", "name": "about", "widget": "markdown"},
-          {"label": "GitHub 地址", "name": "github", "widget": "string"}
-        ]
-      }]
+      "files": [
+        {
+          "name": "profile",
+          "label": "个人资料",
+          "file": "content/settings.json",
+          "format": "json",
+          "fields": [
+            {
+              "label": "博客名称",
+              "name": "name",
+              "widget": "string"
+            },
+            {
+              "label": "首页标题",
+              "name": "headline",
+              "widget": "string"
+            },
+            {
+              "label": "简介",
+              "name": "intro",
+              "widget": "text"
+            },
+            {
+              "label": "关于我",
+              "name": "about",
+              "widget": "markdown"
+            },
+            {
+              "label": "GitHub 地址",
+              "name": "github",
+              "widget": "string"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

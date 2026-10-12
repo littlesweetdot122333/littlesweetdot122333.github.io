@@ -4,11 +4,12 @@
 
 ## 文件说明
 
-- 首页、分类文章列表（支持搜索）、旅行日记、关于我。
+- 首页、分类文章列表（支持搜索）、旅行日记、Coffeee本尊、关于我。
 - 浅色 / 深色模式，手机布局。
 - `content/articles/*.json`：文章，正文为 Markdown。
 - `content/travel/*.json`：旅行日记，可包含地点、封面及正文图片。
 - `content/settings.json`：首页标题、简介与关于我。
+- `content/coffeee.json`：黑白猫 Coffeee 的照片与视频栏目；`assets/coffeee/` 是经过网页优化的素材。
 - `admin/`：中文网页编辑后台，GitHub 登录。
 - `assets/uploads/`：后台上传的照片。仓库公开，内容及 Git 历史可被公众访问。
 - 旧文章链接 `/posts/hello.html`、`/posts/network-note.html` 保留。
@@ -30,7 +31,7 @@ npm run preview
 
 GitHub Pages 使用 **GitHub Actions** 作为发布来源。推送 main 后，`.github/workflows/publish.yml` 自动测试、构建并部署 `dist/`。自定义域名 `coffeee.xyz` 保存在 `CNAME`，HTTPS 保持开启。
 
-## 后台认证（尚待接通）
+## 后台认证
 
 访问 `https://coffeee.xyz/admin/`。`admin/auth.json` 的 `base_url` 为空时，会明确提示登录服务未连接。
 
@@ -55,3 +56,9 @@ https://littlesweetdot122333.github.io
 ```
 
 接通认证后，日常文章修改在网页后台完成，不再手工修改旧 HTML。
+
+## 更新 Coffeee本尊
+
+在后台左侧打开 **Coffeee本尊 → 猫咪相册与视频**，可以修改简介、栏目封面，以及添加、删除或调整照片与视频的顺序。每项选择“照片”或“视频”，填写标题并上传文件；视频建议使用 MP4，可另上传封面照片。缩略图和尺寸可留空，网页会直接显示上传的照片。保存草稿并发布后，等待 GitHub Actions 部署完成。
+
+相册支持放大、方向键切换和照片/视频筛选；视频点击后播放，不自动下载全部视频。仅放 Coffeee 的实拍素材，不确定属于谁的猫先不要加入。
