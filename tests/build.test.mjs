@@ -11,9 +11,9 @@ test('escapes content and strips unsafe Markdown',()=>{
   assert.ok(!markdown('[test](javascript:alert)').includes('javascript:'));
   assert.ok(markdown('![photo](/assets/uploads/test.jpg)').includes('/assets/uploads/test.jpg'));
 });
-test('build preserves old URLs and includes all sections and CMS config',async()=>{
+test('build includes all sections, media files and CMS config',async()=>{
   await build();
-  for (const file of ['index.html','articles/index.html','travel/index.html','coffeee/index.html','about/index.html','posts/hello.html','posts/network-note.html','admin/index.html','404.html']) {
+  for (const file of ['index.html','articles/index.html','travel/index.html','coffeee/index.html','about/index.html','admin/index.html','404.html']) {
     const html = await readFile(path.join(root,'dist',file),'utf8');
     assert.ok(html.includes('lang="zh-CN"'),file);
   }

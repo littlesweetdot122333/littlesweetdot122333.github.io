@@ -12,7 +12,7 @@
 - `content/coffeee.json`：黑白猫 Coffeee 的照片与视频栏目；`assets/coffeee/` 是经过网页优化的素材。
 - `admin/`：中文网页编辑后台，GitHub 登录。
 - `assets/uploads/`：后台上传的照片。仓库公开，内容及 Git 历史可被公众访问。
-- 旧文章链接 `/posts/hello.html`、`/posts/network-note.html` 保留。
+- 两篇初始示例文章已移除；新文章在后台的“文章”栏目创建。
 
 ## 本地构建
 
