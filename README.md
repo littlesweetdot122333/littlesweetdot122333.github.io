@@ -34,7 +34,7 @@ GitHub Pages 使用 **GitHub Actions** 作为发布来源。推送 main 后，`.
 
 访问 `https://coffeee.xyz/admin/`。`admin/auth.json` 的 `base_url` 为空时，会明确提示登录服务未连接。
 
-计划用 Cloudflare Worker 托管 GitHub OAuth 认证端点（`/auth`、`/callback`）。需要用户完成 Cloudflare 注册及 GitHub OAuth App 授权配置。密钥只能放在 Worker secrets 中，不能提交到仓库或配置 JSON。连接后将 Worker 的 HTTPS origin 写入 `base_url`。
+`auth-worker/` 是 Cloudflare Worker GitHub OAuth 认证服务，提供 `/auth`、`/callback`。部署前需在 Cloudflare 中配置 Worker 的 `GITHUB_OAUTH_ID` 和 `GITHUB_OAUTH_SECRET` 两个 Secret；GitHub OAuth App 的回调地址应为 Worker 的 `https://...workers.dev/callback`。密钥只能放在 Worker secrets 中，不能提交到仓库或配置 JSON。部署后将 Worker 的 HTTPS origin 写入 `admin/auth.json` 的 `base_url`。
 
 后台仅允许有仓库写权限的 GitHub 账号。`publish_mode: editorial_workflow` 让新文章先存为草稿，发布时合并到 main 并触发部署。草稿不出现在网站首页，但存储在公开仓库的分支/PR 内，不是私密日记。
 

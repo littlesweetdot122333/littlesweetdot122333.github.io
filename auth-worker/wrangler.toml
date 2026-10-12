@@ -1,0 +1,4 @@
+name = "little-sweet-blog-auth"
+main = "index.mjs"
+compatibility_date = "2026-10-12"
+workers_dev = true
