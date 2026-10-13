@@ -1,11 +1,13 @@
 import {readFile, readdir, mkdir, writeFile, cp, rm} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
 import {marked} from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'dist');
+let cssVersion = '';
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 export function safeImage(value) {
   const text = String(value || '');
@@ -57,7 +59,7 @@ function layout(settings, title, section, content, description = settings.intro)
   const nav = [['/', 'HOME', 'home'], ['/articles/', '文章', 'articles'], ['/travel/', '旅行日记', 'travel'], ['/coffeee/', 'Coffeee本尊', 'coffeee'], ['/about/', '关于', 'about']];
   const github = /^https:\/\/github\.com\/[a-zA-Z0-9_-]+\/?$/.test(settings.github) ? settings.github : 'https://github.com/littlesweetdot122333';
   return `<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)} · ${escape(settings.name)}</title><meta name="description" content="${escape(description)}"><link rel="stylesheet" href="/blog.css">${section === 'home' ? '<link rel="stylesheet" href="/home.css">' : ''}<script>try{document.documentElement.dataset.theme=localStorage.getItem('blog-theme')==='dark'?'dark':'light'}catch{}</script><script defer src="/theme.js"></script></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)} · ${escape(settings.name)}</title><meta name="description" content="${escape(description)}"><link rel="stylesheet" href="/blog.css?v=${cssVersion}">${section === 'home' ? '<link rel="stylesheet" href="/home.css">' : ''}<script>try{document.documentElement.dataset.theme=localStorage.getItem('blog-theme')==='dark'?'dark':'light'}catch{}</script><script defer src="/theme.js"></script></head>
 <body><a class="skip" href="#main">跳到正文</a><div class="shell${section === 'home' ? ' shell-home' : ''}"><header class="site-header"><a class="brand" href="/">${escape(settings.name)}'s Blog</a><nav class="nav" aria-label="主导航">${nav.map(([href,label,id]) => `<a href="${href}"${section === id ? ' aria-current="page"' : ''}>${label}</a>`).join('')}<button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到深色模式">☾</button></nav></header><main id="main">${content}</main><footer class="footer"><span>© ${new Date().getFullYear()} ${escape(settings.name)} · 记录与分享</span><span class="footer-links"><a href="${github}">GitHub</a><a href="/admin/">写文章 ↗</a></span></footer></div></body></html>`;
 }
 async function save(file, html) {
@@ -68,6 +70,7 @@ export async function build() {
   if (path.resolve(out) !== path.join(root, 'dist')) throw new Error('Invalid output path');
   await rm(out, {recursive:true, force:true});
   await mkdir(out, {recursive:true});
+  cssVersion = createHash('sha256').update(await readFile(path.join(root,'public/blog.css'))).digest('hex').slice(0,10);
   const settings = await readJSON('content/settings.json');
   const coffeee = await readJSON('content/coffeee.json');
   const articles = await collection('content/articles');
