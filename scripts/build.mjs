@@ -29,7 +29,7 @@ export function coffeeeGallery(profile) {
 export function markdown(body) {
   return sanitizeHtml(marked.parse(String(body || '')), {
     allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
-    allowedAttributes: {...sanitizeHtml.defaults.allowedAttributes, img: ['src', 'alt', 'title', 'loading']},
+    allowedAttributes: {...sanitizeHtml.defaults.allowedAttributes, a: [...sanitizeHtml.defaults.allowedAttributes.a, 'download'], img: ['src', 'alt', 'title', 'loading']},
     allowedSchemes: ['https', 'http', 'mailto'],
     allowProtocolRelative: false,
     transformTags: {img: (_, attrs) => ({tagName:'img', attribs:{src:safeImage(attrs.src), alt:attrs.alt || '', loading:'lazy'}})}
