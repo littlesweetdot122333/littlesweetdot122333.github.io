@@ -56,7 +56,7 @@ function rows(posts, summaries = false) {
   }).join('')}</ul>`;
 }
 function layout(settings, title, section, content, description = settings.intro) {
-  const nav = [['/', 'HOME', 'home'], ['/articles/', '文章', 'articles'], ['/travel/', '旅行日记', 'travel'], ['/coffeee/', 'Coffeee本尊', 'coffeee'], ['/about/', '关于', 'about']];
+  const nav = [['/', 'HOME', 'home'], ['/articles/', '文章', 'articles'], ['/projects/', '项目', 'projects'], ['/travel/', '旅行日记', 'travel'], ['/coffeee/', 'Coffeee本尊', 'coffeee'], ['/about/', '关于', 'about']];
   const github = /^https:\/\/github\.com\/[a-zA-Z0-9_-]+\/?$/.test(settings.github) ? settings.github : 'https://github.com/littlesweetdot122333';
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)} · ${escape(settings.name)}</title><meta name="description" content="${escape(description)}"><link rel="stylesheet" href="/blog.css?v=${cssVersion}">${section === 'home' ? '<link rel="stylesheet" href="/home.css">' : ''}<script>try{document.documentElement.dataset.theme=localStorage.getItem('blog-theme')==='dark'?'dark':'light'}catch{}</script><script defer src="/theme.js"></script></head>
@@ -73,6 +73,14 @@ export async function build() {
   cssVersion = createHash('sha256').update(await readFile(path.join(root,'public/blog.css'))).digest('hex').slice(0,10);
   const settings = await readJSON('content/settings.json');
   const coffeee = await readJSON('content/coffeee.json');
+  const projects = [];
+  for (const file of await readdir(path.join(root,'content/projects'))) {
+    if (!file.endsWith('.json')) continue;
+    const project = await readJSON(`content/projects/${file}`);
+    if (!/^\/projects\/[a-z0-9-]+\/$/.test(project.href)) throw new Error('Invalid project URL');
+    projects.push(project);
+  }
+  projects.sort((a,b)=>b.date.localeCompare(a.date));
   const articles = await collection('content/articles');
   const travel = await collection('content/travel', true);
   const all = [...articles,...travel].sort((a,b)=>b.date.localeCompare(a.date));
@@ -83,6 +91,11 @@ export async function build() {
   await save('index.html',layout(settings,'HOME','home',`<section class="home-cover" aria-label="Coffeee 的主页">${homeCover ? `<img class="home-cover-photo" src="${escape(homeCover)}" alt="${escape(coverEntry?.alt || 'Coffeee 的主页封面')}" fetchpriority="high" decoding="async">` : ''}<h1 class="home-title" aria-label="Coffeee"><span data-typewriter aria-hidden="true">Coffeee</span><span class="typing-cursor" aria-hidden="true">|</span></h1></section><script defer src="/home.js"></script>`));
   await save('coffeee/index.html',layout(settings,'Coffeee本尊','coffeee',coffeeeGallery(coffeee),'我是 COFFEEE，这是我的相册和视频日记。'));
   const categories = [...new Set(articles.map(post=>post.category))];
+  await save('projects/index.html',layout(settings,'我的项目','projects',`${intro('Things I made','我的项目','我把自己做的小东西放在这里。挑一个，点进去看看。')}<section class="section project-list">${projects.map(project=>`<article class="project-card"><a href="${escape(project.href)}" aria-label="打开项目：${escape(project.title)}"><img src="${escape(safeImage(project.cover))}" alt="${escape(project.title)} 项目封面" loading="lazy"></a><p class="meta">${escape(project.date)} · ${escape(project.type)}</p><h2><a href="${escape(project.href)}">${escape(project.title)} ↗</a></h2><p>${escape(project.description)}</p><p class="meta">${escape(project.note)}</p><a class="project-launch" href="${escape(project.href)}">打开体验 →</a></article>`).join('')}</section>`));
+  for (const project of projects) {
+    const slug = project.href.split('/')[2];
+    await cp(path.join(root,'projects',slug),path.join(out,'projects',slug),{recursive:true,filter:src=>!src.endsWith('README.md')});
+  }
   await save('articles/index.html',layout(settings,'文章列表','articles',`${intro('Archive','文章列表','我写下的技术笔记、生活小事，还有读书时的一点想法。')}<label for="search" class="meta">搜索标题、分类或摘要</label><input class="search" id="search" type="search" data-search placeholder="输入关键词…">${categories.map(category=>`<section class="section" data-category><div class="section-head"><h2>${escape(category)}</h2><span class="meta">${articles.filter(post=>post.category===category).length} 篇</span></div>${rows(articles.filter(post=>post.category===category),true)}</section>`).join('')}${articles.length ? '' : '<p class="empty">我还没写下新的记录。</p>'}<p class="empty" data-no-results hidden role="status">没有找到匹配的文章，试试其他关键词。</p>`));
   await save('travel/index.html',layout(settings,'旅行日记','travel',`${intro('On the road','旅行日记','我把路上的见闻，留在文字和照片里。')}<section class="section">${travel.length ? `<div class="travel-grid">${travel.map(post=>`<article class="travel-card">${safeImage(post.cover) ? `<a href="${post.href}" tabindex="-1" aria-hidden="true"><img src="${escape(safeImage(post.cover))}" alt="" loading="lazy"></a>` : ''}<p class="meta">${post.date} · ${escape(post.location)}</p><h2><a href="${post.href}">${escape(post.title)}</a></h2><p class="summary">${escape(post.description)}</p></article>`).join('')}</div>` : '<p class="empty">还没有旅行日记。我先把这个位置留着。</p>'}</section>`));
   await save('about/index.html',layout(settings,'关于我','about',`${intro('Hello','关于我',settings.intro)}<section class="section prose">${markdown(settings.about)}</section>`));

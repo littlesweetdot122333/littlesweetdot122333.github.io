@@ -4,7 +4,8 @@
 
 ## 文件说明
 
-- HOME 封面页、分类文章列表（支持搜索）、旅行日记、Coffeee本尊、关于我。
+- HOME 封面页、分类文章列表（支持搜索）、项目、旅行日记、Coffeee本尊、关于我。
+- `content/projects/*.json`：项目入口；`projects/anju/` 是《安居》独立恐怖互动体验，构建后发布到 `/projects/anju/`。
 - 浅色 / 深色模式，手机布局。
 - `content/articles/*.json`：文章，正文为 Markdown。
 - `content/travel/*.json`：旅行日记，可包含地点、封面及正文图片。
