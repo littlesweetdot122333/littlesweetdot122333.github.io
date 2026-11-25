@@ -13,7 +13,7 @@ test('escapes content and strips unsafe Markdown',()=>{
 });
 test('build includes all sections, media files and CMS config',async()=>{
   await build();
-  for (const file of ['index.html','articles/index.html','projects/index.html','projects/anju/index.html','travel/index.html','coffeee/index.html','about/index.html','admin/index.html','404.html']) {
+  for (const file of ['index.html','articles/index.html','projects/index.html','projects/anju/index.html','projects/hearthly/index.html','travel/index.html','coffeee/index.html','about/index.html','admin/index.html','404.html']) {
     const html = await readFile(path.join(root,'dist',file),'utf8');
     assert.ok(html.includes('lang="zh-CN"'),file);
   }
@@ -29,6 +29,9 @@ test('build includes all sections, media files and CMS config',async()=>{
   }
   assert.ok((await readFile(path.join(root,'dist/coffeee/index.html'),'utf8')).includes('data-photo-src'));
   for (const file of ['projects/anju/style.css','projects/anju/app.mjs','projects/anju/state.mjs','assets/projects/anju-cover.svg']) await access(path.join(root,'dist',file));
+  const projects = await readFile(path.join(root,'dist/projects/index.html'),'utf8');
+  assert.ok(projects.indexOf('href="/projects/hearthly/"') < projects.indexOf('href="/projects/anju/"'));
+  await access(path.join(root,'dist/assets/projects/hearthly-cover.jpg'));
 });
 test('cat gallery rejects unsafe media paths and prevents HTML in captions',()=>{
   assert.equal(safeVideo('/assets/coffeee/test.mp4'),'/assets/coffeee/test.mp4');

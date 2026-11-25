@@ -80,7 +80,7 @@ export async function build() {
     if (!/^\/projects\/[a-z0-9-]+\/$/.test(project.href)) throw new Error('Invalid project URL');
     projects.push(project);
   }
-  projects.sort((a,b)=>b.date.localeCompare(a.date));
+  projects.sort((a,b)=>Number(Boolean(b.featured))-Number(Boolean(a.featured)) || b.date.localeCompare(a.date));
   const articles = await collection('content/articles');
   const travel = await collection('content/travel', true);
   const all = [...articles,...travel].sort((a,b)=>b.date.localeCompare(a.date));
@@ -91,7 +91,7 @@ export async function build() {
   await save('index.html',layout(settings,'HOME','home',`<section class="home-cover" aria-label="Coffeee 的主页">${homeCover ? `<img class="home-cover-photo" src="${escape(homeCover)}" alt="${escape(coverEntry?.alt || 'Coffeee 的主页封面')}" fetchpriority="high" decoding="async">` : ''}<h1 class="home-title" aria-label="Coffeee"><span data-typewriter aria-hidden="true">Coffeee</span><span class="typing-cursor" aria-hidden="true">|</span></h1></section><script defer src="/home.js"></script>`));
   await save('coffeee/index.html',layout(settings,'Coffeee本尊','coffeee',coffeeeGallery(coffeee),'我是 COFFEEE，这是我的相册和视频日记。'));
   const categories = [...new Set(articles.map(post=>post.category))];
-  await save('projects/index.html',layout(settings,'我的项目','projects',`${intro('Things I made','我的项目','我把自己做的小东西放在这里。挑一个，点进去看看。')}<section class="section project-list">${projects.map(project=>`<article class="project-card"><a href="${escape(project.href)}" aria-label="打开项目：${escape(project.title)}"><img src="${escape(safeImage(project.cover))}" alt="${escape(project.title)} 项目封面" loading="lazy"></a><p class="meta">${escape(project.date)} · ${escape(project.type)}</p><h2><a href="${escape(project.href)}">${escape(project.title)} ↗</a></h2><p>${escape(project.description)}</p><p class="meta">${escape(project.note)}</p><a class="project-launch" href="${escape(project.href)}">打开体验 →</a></article>`).join('')}</section>`));
+  await save('projects/index.html',layout(settings,'我的项目','projects',`${intro('Things I made','我的项目','我把做过的项目和复现的网页放在这里。挑一个，点进去看看。')}<section class="section project-list">${projects.map(project=>`<article class="project-card"><a href="${escape(project.href)}" aria-label="打开项目：${escape(project.title)}"><img src="${escape(safeImage(project.cover))}" alt="${escape(project.title)} 项目封面" loading="lazy"></a><p class="meta">${escape(project.date)} · ${escape(project.type)}</p><h2><a href="${escape(project.href)}">${escape(project.title)} ↗</a></h2><p>${escape(project.description)}</p><p class="meta">${escape(project.note)}</p><a class="project-launch" href="${escape(project.href)}">打开体验 →</a></article>`).join('')}</section>`));
   for (const project of projects) {
     const slug = project.href.split('/')[2];
     await cp(path.join(root,'projects',slug),path.join(out,'projects',slug),{recursive:true,filter:src=>!src.endsWith('README.md')});
